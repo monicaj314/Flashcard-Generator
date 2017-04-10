@@ -1,6 +1,6 @@
 var inquirer = require("inquirer");
 var fs = require("fs");
-var data = fs.readFileSync('flashcards.json');
+var data = fs.readFileSync('flashcard.json');
 var flashcards = JSON.parse(data);
 var input = process.argv;
 
