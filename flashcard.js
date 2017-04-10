@@ -1,4 +1,7 @@
 var inquirer = require("inquirer");
+var fs = require("fs");
+var data = fs.readFileSync('flashcards.json');
+var flashcards = JSON.parse(data);
 var input = process.argv;
 
 function BasicCard(front, back)  {
@@ -36,7 +39,25 @@ var ifCloze = [{
         name: "cloze"
     }
     ];
+
+function startFlashcards() {
+    inquirer.prompt([
+        {
+            type: "input",
+            message: flashcards[i].front,
+            validate: function(string) {
+                if (string == flashcards[i].back) {
+                    console.log("\n Correct!")
+                } else {
+                    console.log("\n Incorrect.")
+                };
+            },
+            name: "Flashcard 1"
+        }
+    ])
     
+}
+
 function makeFlashcards() {
     if (input[2] == "create" && input[3] == "basic") {
         inquirer.prompt(ifBasic, function(answers) {
@@ -51,8 +72,9 @@ function makeFlashcards() {
             createCloze(clozeFront, clozeBack);
             });
         }  else if (input[2] == "start") {
-        console.log("Under Construction...")
+       console.log("Under construction")
+       startFlashcards();
+        }
     };
-};
 
 makeFlashcards();
