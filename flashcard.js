@@ -6,11 +6,6 @@ var flashcards = JSON.parse(data);
 
 var input = process.argv;
 
-function BasicCard(front, back)  {
-    this.front = front;
-    this.back = back;
-};
-
 function ClozeCard(text, cloze) {
     this.text = text;
     this.cloze = cloze; 
@@ -82,12 +77,34 @@ var ifCloze = [{
     // });
     //console.log(flashcards[0].front);
 
-var createBasic = new BasicCard(this.front, this.back);
+function BasicCard(front, back)  {
+    this.front = front;
+    this.back = back;
+};
 
-inquirer.prompt([{
+
+var createBasic = new BasicCard(this.front, this.back); 
+
+var flashcardIndex = 0;
+function startFlashcards() {
+
+    inquirer.prompt([{
     type: "input",
-    message: flashcards[0].front,
+    message: flashcards[flashcardIndex].front,
     name: "Flashcard"
     }]).then(function(answer) {
-    console.log(answer);
-});
+    if (answer.Flashcard == flashcards[flashcardIndex].back) {
+        console.log("Correct!");
+        flashcardIndex++;
+        startFlashcards();
+    } else {
+        console.log("Incorrect. The correct answer is " + flashcards[flashcardIndex].back);
+        flashcardIndex++;
+        startFlashcards();
+    }
+    });
+};
+
+startFlashcards();
+
+    
