@@ -1,7 +1,9 @@
 var inquirer = require("inquirer");
 var fs = require("fs");
-var data = fs.readFileSync('flashcard.json');
+var jsonFile = 'flashcard.json'
+var data = fs.readFileSync(jsonFile);
 var flashcards = JSON.parse(data);
+
 var input = process.argv;
 
 function BasicCard(front, back)  {
@@ -14,8 +16,19 @@ function ClozeCard(text, cloze) {
     this.cloze = cloze; 
 };
 
-var createBasic = new BasicCard(this.front, this.back);
+
 var createCloze = new ClozeCard(this.full, this.blank);
+
+// Revising this later for creating new flashcards through node command
+// var obj = {
+//     dataArray: []
+// };
+// var json = JSON.stringify(obj);
+
+// function pushCard() {
+//     fs.appendFile(jsonFile, json, 'utf8', callback)
+// }
+// Prompts for creating new flashcards via command line
 var ifBasic = [{
         type: "input",
         message: "Enter your question.",
@@ -39,26 +52,8 @@ var ifCloze = [{
         name: "cloze"
     }
     ];
-
-function startFlashcards() {
-    inquirer.prompt([
-        {
-            type: "input",
-            message: flashcards[i].front,
-            validate: function(string) {
-                if (string == flashcards[i].back) {
-                    console.log("\n Correct!")
-                } else {
-                    console.log("\n Incorrect.")
-                };
-            },
-            name: "Flashcard 1"
-        }
-    ])
-    
-}
-
-function makeFlashcards() {
+// Function for creating new flashcards via command line
+    function makeFlashcards() {
     if (input[2] == "create" && input[3] == "basic") {
         inquirer.prompt(ifBasic, function(answers) {
             var basicFront = answers.front;
@@ -71,10 +66,28 @@ function makeFlashcards() {
             var clozeBack = answers.cloze;
             createCloze(clozeFront, clozeBack);
             });
-        }  else if (input[2] == "start") {
-       console.log("Under construction")
-       startFlashcards();
-        }
+        }  
     };
 
-makeFlashcards();
+//Start game and loop through all the basic questions. 
+//For now, prompts next question on user input 
+
+//function startFlashcards() {
+    // var allCards = flashcards.map(function(card, i) {
+    // return {
+    //             type: "input",
+    //             message: card.front,
+    //             name: "Flashcard" + card[i]
+    //     };  
+    // });
+    //console.log(flashcards[0].front);
+
+var createBasic = new BasicCard(this.front, this.back);
+
+inquirer.prompt([{
+    type: "input",
+    message: flashcards[0].front,
+    name: "Flashcard"
+    }]).then(function(answer) {
+    console.log(answer);
+});
